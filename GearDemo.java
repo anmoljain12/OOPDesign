@@ -24,9 +24,14 @@ class Gear{
 		return chainRing/ (double) cog;
 	}
 
-	public double gearInches(){
-		return this.ratio()*(rim+(tire*2));
+	public double diameter(){
+		return rim + (tire * 2);
 	}
+
+	public double gearInches(){
+		return ratio() * diameter();
+	}
+
 
 }
 
