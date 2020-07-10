@@ -8,30 +8,38 @@ package learnJava;
 
 class Gear{
 
+	private class Wheel{
+		double rim;
+		double tire;
+
+		Wheel(double rim, double tire){
+			this.rim = rim;
+			this.tire = tire;
+		}
+
+		double diameter(){
+			return rim + (tire * 2);
+		}
+
+	}
+
 	private int chainRing;
 	private int cog;
-	private double rim;
-	private double tire;
+	private Wheel wheel;
 
 	public Gear(int chainRing, int cog, double rim, double tire){
 		this.chainRing = chainRing;
 		this.cog = cog;
-		this.rim = rim;
-		this.tire = tire;
+		wheel = new Wheel(rim, tire);
 	}
 
 	public double ratio(){
 		return chainRing/ (double) cog;
 	}
 
-	public double diameter(){
-		return rim + (tire * 2);
-	}
-
 	public double gearInches(){
-		return ratio() * diameter();
+		return ratio() * wheel.diameter();
 	}
-
 
 }
 
