@@ -12,12 +12,6 @@ class Gear{
 	private int cog;
 	private Wheel wheel;
 
-	public Gear(int chainRing, int cog, double rim, double tire){
-		this.chainRing = chainRing;
-		this.cog = cog;
-		wheel = new Wheel(rim, tire);
-	}
-
 	public Gear(int chainRing, int cog, Wheel wheel){
 		this.chainRing = chainRing;
 		this.cog = cog;
@@ -64,6 +58,7 @@ public class GearDemo{
 		Wheel wheel = new Wheel(26, 1.5);
 		System.out.println(wheel.circumference());
 		System.out.println((new Gear(52, 11, wheel)).gearInches());
+		System.out.println((new Gear(52, 11, new Wheel(26, 1.5))).gearInches());
 		System.out.println((new Gear(52, 11)).ratio());
 	}
 }
