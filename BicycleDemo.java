@@ -11,16 +11,20 @@ import java.util.Map;
 import java.util.Arrays;
 
 class Bicycle{
-	
+	String size;
+
+	public Bicycle(Map<String, String> args){
+		size = args.get("size");
+	}
+
 }
 
 class RoadBike extends Bicycle{
-	String size;
 	String tape_color;
 	Map<String, String> spares;
 
 	public RoadBike(Map<String, String> args){
-		size = args.get("size");
+		super(args);
 		tape_color = args.get("tape_color");
 		spares = getSpares();
 	}
@@ -34,7 +38,7 @@ class RoadBike extends Bicycle{
 	}
 }
 
-/*
+
 class MountainBike extends Bicycle{
 	String front_shock;
 	String rear_shock;
@@ -43,16 +47,16 @@ class MountainBike extends Bicycle{
 		super(args);
 		front_shock = args.get("front_shock");
 		rear_shock = args.get("rear_shock");
-		spares = getSpares();
+		//spares = getSpares();
 	}
 
-	private Map<String, String> getSpares(){
-		spares.put("rear_shock", rear_shock);
-		return spares;
-	}
+	//private Map<String, String> getSpares(){
+	//	spares.put("rear_shock", rear_shock);
+	//	return spares;
+	//}
 
 }
-*/
+
 public class BicycleDemo{
 	public static void main(String[] arg) {
 		Map<String, String> args1 = new HashMap<>();
@@ -60,16 +64,16 @@ public class BicycleDemo{
 		args1.put("tape_color", "red");
 		RoadBike road_bike = new RoadBike(args1);
 		System.out.println(road_bike.size);
-		System.out.println(Arrays.asList(road_bike.spares));
+		//System.out.println(Arrays.asList(road_bike.spares));
 
-		/*
+		
 		Map<String, String> args2 = new HashMap<>();
 		args2.put("size", "S");
-		args.put("front_shock", "Manitou");
+		args2.put("front_shock", "Manitou");
 		args2.put("rear_shock", "Fox");
 		MountainBike mountain_bike = new MountainBike(args2);
 		System.out.println(mountain_bike.size);
-		System.out.println(Arrays.asList(mountain_bike.spares));
-		*/
+		//System.out.println(Arrays.asList(mountain_bike.spares));
+		
 	}
 }
