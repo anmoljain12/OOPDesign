@@ -12,9 +12,13 @@ import java.util.Arrays;
 
 class Bicycle{
 	String size;
+	String chain;
+	String tire_size;
 
 	public Bicycle(Map<String, String> args){
 		size = args.get("size");
+		chain = args.get("chain") != null ? args.get("chain") : "10-speed";
+		tire_size = args.get("tire_size");
 	}
 
 }
@@ -25,6 +29,7 @@ class RoadBike extends Bicycle{
 
 	public RoadBike(Map<String, String> args){
 		super(args);
+		tire_size = (tire_size!=null) ? tire_size:"23";
 		tape_color = args.get("tape_color");
 		spares = getSpares();
 	}
@@ -45,6 +50,7 @@ class MountainBike extends Bicycle{
 
 	public MountainBike(Map<String, String> args){
 		super(args);
+		tire_size = (tire_size!=null) ? tire_size: "2.1";
 		front_shock = args.get("front_shock");
 		rear_shock = args.get("rear_shock");
 		//spares = getSpares();
@@ -63,7 +69,8 @@ public class BicycleDemo{
 		args1.put("size", "M");
 		args1.put("tape_color", "red");
 		RoadBike road_bike = new RoadBike(args1);
-		System.out.println(road_bike.size);
+		System.out.println(road_bike.tire_size);
+		System.out.println(road_bike.chain);
 		//System.out.println(Arrays.asList(road_bike.spares));
 
 		
@@ -72,7 +79,9 @@ public class BicycleDemo{
 		args2.put("front_shock", "Manitou");
 		args2.put("rear_shock", "Fox");
 		MountainBike mountain_bike = new MountainBike(args2);
-		System.out.println(mountain_bike.size);
+		System.out.println(mountain_bike.tire_size);
+		System.out.println(mountain_bike.chain);
+
 		//System.out.println(Arrays.asList(mountain_bike.spares));
 		
 	}
