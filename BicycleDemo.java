@@ -88,7 +88,7 @@ class RecumbentBike extends Bicycle{
 	String flag;
 
 	public RecumbentBike(Map<String, String> args){
-		//super(args);   Super not called
+		super(args);   Super not called
 		flag = args.get("flag");
 		spares = getSpares();
 	}
