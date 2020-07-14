@@ -14,32 +14,50 @@ class Bicycle{
 	String size;
 	String chain;
 	String tire_size;
+	Map<String, String> spares = new HashMap<>();
+
+	public Bicycle() {}
 
 	public Bicycle(Map<String, String> args){
 		size = args.get("size");
-		chain = args.get("chain") != null ? args.get("chain") : "10-speed";
-		tire_size = args.get("tire_size");
+		chain = args.get("chain") != null ? args.get("chain") : this.getDefaultChain();
+		tire_size = args.get("tire_size")!= null ? args.get("tire_size") : this.getDefaultTire();
+		spares = getSpares();
+	}
+
+	public Map<String, String> getSpares(){
+		spares.put("chain", chain);
+		spares.put("tire_size", tire_size);
+		return spares;
+	}
+
+	public String getDefaultChain(){
+		return "10-speed";
+	}
+
+	public String getDefaultTire(){
+		return null;
 	}
 
 }
 
 class RoadBike extends Bicycle{
 	String tape_color;
-	Map<String, String> spares;
 
 	public RoadBike(Map<String, String> args){
 		super(args);
-		tire_size = (tire_size!=null) ? tire_size:"23";
 		tape_color = args.get("tape_color");
 		spares = getSpares();
 	}
 
-	private Map<String, String> getSpares(){
-		Map<String, String> newSpares = new HashMap<>();
-		newSpares.put("chain", "10-speed");
-		newSpares.put("tire_size", "23");
-		newSpares.put("tape_color", tape_color);
-		return newSpares;
+	public Map<String, String> getSpares(){
+		spares = super.getSpares();
+		spares.put("tape_color", tape_color);
+		return spares;
+	}
+
+	public String getDefaultTire(){
+		return "23";
 	}
 }
 
@@ -50,18 +68,48 @@ class MountainBike extends Bicycle{
 
 	public MountainBike(Map<String, String> args){
 		super(args);
-		tire_size = (tire_size!=null) ? tire_size: "2.1";
 		front_shock = args.get("front_shock");
 		rear_shock = args.get("rear_shock");
-		//spares = getSpares();
+		spares = getSpares();
 	}
 
-	//private Map<String, String> getSpares(){
-	//	spares.put("rear_shock", rear_shock);
-	//	return spares;
-	//}
+	public Map<String, String> getSpares(){
+		spares = super.getSpares();
+		spares.put("rear_shock", rear_shock);
+		return spares;
+	}
+
+	public String getDefaultTire(){
+		return "2.1";
+	}
+}
+
+class RecumbentBike extends Bicycle{
+	String flag;
+
+	public RecumbentBike(Map<String, String> args){
+		//super(args);   Super not called
+		flag = args.get("flag");
+		spares = getSpares();
+	}
+
+	public Map<String, String> getSpares(){
+		spares = super.getSpares();
+		spares.put("flag", flag);
+		return spares;
+	}
+
+	public String getDefaultChain(){
+		return "9-speed";
+	}
+
+	public String getDefaultTire(){
+		return "28";
+	}
+
 
 }
+
 
 public class BicycleDemo{
 	public static void main(String[] arg) {
@@ -71,9 +119,8 @@ public class BicycleDemo{
 		RoadBike road_bike = new RoadBike(args1);
 		System.out.println(road_bike.tire_size);
 		System.out.println(road_bike.chain);
-		//System.out.println(Arrays.asList(road_bike.spares));
+		System.out.println(Arrays.asList(road_bike.spares));
 
-		
 		Map<String, String> args2 = new HashMap<>();
 		args2.put("size", "S");
 		args2.put("front_shock", "Manitou");
@@ -81,8 +128,14 @@ public class BicycleDemo{
 		MountainBike mountain_bike = new MountainBike(args2);
 		System.out.println(mountain_bike.tire_size);
 		System.out.println(mountain_bike.chain);
+		System.out.println(Arrays.asList(mountain_bike.spares));
 
-		//System.out.println(Arrays.asList(mountain_bike.spares));
+		Map<String, String> args3 = new HashMap<>();
+		args3.put("flag", "Tall and orange");
+		RecumbentBike recumbent_bike = new RecumbentBike(args3);
+		System.out.println(recumbent_bike.tire_size);
+		System.out.println(recumbent_bike.chain);
+		System.out.println(Arrays.asList(recumbent_bike.spares));
 		
 	}
 }
