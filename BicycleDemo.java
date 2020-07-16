@@ -2,140 +2,139 @@
 javac -version
 javac BicycleDemo.java -d ClassFiles
 java -cp ClassFiles learnJava.BicycleDemo
-
 */
+
 package learnJava;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.Arrays;
 
-class Bicycle{
-	String size;
-	String chain;
-	String tire_size;
-	Map<String, String> spares = new HashMap<>();
+class Part {
+    private String name;
+    private String value;
+    private Boolean needSpare;
 
-	public Bicycle() {}
+    public Part(String name, String value, Boolean needSpare) {
+        this.name = name;
+        this.value = value;
+        this.needSpare = needSpare;
+    }
 
-	public Bicycle(Map<String, String> args){
-		size = args.get("size");
-		chain = args.get("chain") != null ? args.get("chain") : this.getDefaultChain();
-		tire_size = args.get("tire_size")!= null ? args.get("tire_size") : this.getDefaultTire();
-		spares = getSpares();
-	}
-
-	public Map<String, String> getSpares(){
-		spares.put("chain", chain);
-		spares.put("tire_size", tire_size);
-		return spares;
-	}
-
-	public String getDefaultChain(){
-		return "10-speed";
-	}
-
-	public String getDefaultTire(){
-		return null;
-	}
-
+    public String getName() { 
+        return this.name; 
+    }
+    public String getValue() {
+        return this.value;
+    }
+    public Boolean needSpare() { 
+        return this.needSpare; 
+    }
 }
 
-class RoadBike extends Bicycle{
-	String tape_color;
+class Parts {
+    private ArrayList<Part> parts;
 
-	public RoadBike(Map<String, String> args){
-		super(args);
-		tape_color = args.get("tape_color");
-		spares = getSpares();
-	}
+    public Parts(ArrayList<Part> parts) {
+        this.parts = parts;
+    }
 
-	public Map<String, String> getSpares(){
-		spares = super.getSpares();
-		spares.put("tape_color", tape_color);
-		return spares;
-	}
-
-	public String getDefaultTire(){
-		return "23";
-	}
+    public ArrayList<Part> getPartList() { 
+        return this.parts; 
+    }
+    public void addPart(Part part) {
+        this.parts.add(part);
+    }
 }
 
+class Bicycle {
+    private String size;
+    private Parts parts;
 
-class MountainBike extends Bicycle{
-	String front_shock;
-	String rear_shock;
+    public Bicycle(String size, Parts parts) {
+        this.size = size;
+        this.parts = parts;
+    }
 
-	public MountainBike(Map<String, String> args){
-		super(args);
-		front_shock = args.get("front_shock");
-		rear_shock = args.get("rear_shock");
-		spares = getSpares();
-	}
-
-	public Map<String, String> getSpares(){
-		spares = super.getSpares();
-		spares.put("rear_shock", rear_shock);
-		return spares;
-	}
-
-	public String getDefaultTire(){
-		return "2.1";
-	}
+    public String getSize() {
+        return this.size;
+    }
+    public Parts getParts() { 
+        return this.parts; 
+    }
+    public Parts getSpares() {
+        Parts spares = new Parts(new ArrayList<>());
+        for(Part part : this.parts.getPartList()) {
+            if(part.needSpare()) spares.addPart(part);
+        }
+        return spares;
+    }
 }
 
-class RecumbentBike extends Bicycle{
-	String flag;
-
-	public RecumbentBike(Map<String, String> args){
-		super(args);   Super not called
-		flag = args.get("flag");
-		spares = getSpares();
-	}
-
-	public Map<String, String> getSpares(){
-		spares = super.getSpares();
-		spares.put("flag", flag);
-		return spares;
-	}
-
-	public String getDefaultChain(){
-		return "9-speed";
-	}
-
-	public String getDefaultTire(){
-		return "28";
-	}
-
-
+class PartsFactory {
+    public static Parts build(Object[][] config) {
+        Parts parts = new Parts(new ArrayList<>());
+        for(Object[] part_config: config){
+            Part part = new Part((String)part_config[0], (String)part_config[1], (Boolean)part_config[2]);
+            parts.addPart(part);
+        }
+        return parts;
+    }
 }
 
+public class BicycleDemo {
+    public static void main(String[] args) {
 
-public class BicycleDemo{
-	public static void main(String[] arg) {
-		Map<String, String> args1 = new HashMap<>();
-		args1.put("size", "M");
-		args1.put("tape_color", "red");
-		RoadBike road_bike = new RoadBike(args1);
-		System.out.println(road_bike.tire_size);
-		System.out.println(road_bike.chain);
-		System.out.println(Arrays.asList(road_bike.spares));
+        Object[][] road_config = {
+            {"chain", "10-speed", true},
+            {"tire_size", "23", true},
+            {"tape_color", "red", true}
+        };
 
-		Map<String, String> args2 = new HashMap<>();
-		args2.put("size", "S");
-		args2.put("front_shock", "Manitou");
-		args2.put("rear_shock", "Fox");
-		MountainBike mountain_bike = new MountainBike(args2);
-		System.out.println(mountain_bike.tire_size);
-		System.out.println(mountain_bike.chain);
-		System.out.println(Arrays.asList(mountain_bike.spares));
+        Object[][] mountain_config = {
+            {"chain", "10-speed", true},
+            {"tire_size", "2.1", true},
+            {"front_shock", "Manitou", false},
+            {"rear_shock", "Fox", true}
+        };
 
-		Map<String, String> args3 = new HashMap<>();
-		args3.put("flag", "Tall and orange");
-		RecumbentBike recumbent_bike = new RecumbentBike(args3);
-		System.out.println(recumbent_bike.tire_size);
-		System.out.println(recumbent_bike.chain);
-		System.out.println(Arrays.asList(recumbent_bike.spares));
-		
-	}
+        Object[][] recumbent_config = {
+            {"chain", "9-speed", true},
+            {"tire_size", "28", true},
+            {"flag", "tall and orange", true}
+        };
+
+        Bicycle roadBike = new Bicycle(
+            "L",
+            PartsFactory.build(road_config)
+        );
+        
+        Bicycle mountainBike = new Bicycle(
+            "M",
+            PartsFactory.build(mountain_config)
+        );
+
+        Bicycle recumbentBike = new Bicycle(
+            "L",
+            PartsFactory.build(recumbent_config)
+        );
+
+        Parts roadSpares = roadBike.getSpares();
+        Parts mountainSpares = mountainBike.getSpares();
+        Parts recumbentSpares = recumbentBike.getSpares();
+
+        System.out.println("\nRoad bike spares");
+        for(Part part : roadSpares.getPartList()) {
+            System.out.println(part.getName() + ": " + part.getValue());
+        }
+        
+        System.out.println("\nMountain bike spares");
+        for(Part part : mountainSpares.getPartList()) {
+            System.out.println(part.getName() + ": " + part.getValue());
+        }
+
+        System.out.println("\nRecumbent bike spares");
+        for(Part part : recumbentSpares.getPartList()) {
+            System.out.println(part.getName() + ": " + part.getValue());
+        }
+    }
 }
